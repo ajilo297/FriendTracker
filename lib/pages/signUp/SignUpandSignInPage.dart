@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
 import './ISignupandSignInpage.dart';
 import './SignUpandSignInPresenter.dart';
 import './../home/HomePage.dart';
@@ -18,20 +17,22 @@ class SignUpSignInPage extends StatefulWidget {
 class _SignUpSignInPageState extends State<SignUpSignInPage>
     with SingleTickerProviderStateMixin
     implements ISignUpandSigninPage {
-
   GlobalKey<ScaffoldState> scaffoldKey;
   SignUpandSignInPagePresenter presenter;
 
   GlobalKey<FormState> loginFormKey;
   GlobalKey<FormState> registrationFormKey;
   TextEditingController passwordController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController confirmController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+
   TabController tabController;
 
   List<Item> items = List();
   Item item;
-  DatabaseReference itemRef;
 
-  String _email, _password;
+  String _email, _password, _name;
 
   _SignUpSignInPageState() {
     scaffoldKey = GlobalKey<ScaffoldState>();
@@ -44,11 +45,6 @@ class _SignUpSignInPageState extends State<SignUpSignInPage>
   @override
   void initState() {
     super.initState();
-    // item = Item("", "");
-    // final FirebaseDatabase database = FirebaseDatabase.instance; //Rather then just writing FirebaseDatabase(), get the instance.  
-    // itemRef = database.reference().child('items');
-    // itemRef.onChildAdded.listen(_onEntryAdded);
-    // itemRef.onChildChanged.listen(_onEntryChanged);
   }
 
   bool loginValidateAndSave() {
@@ -79,7 +75,7 @@ class _SignUpSignInPageState extends State<SignUpSignInPage>
 
   void signUpValidateAndSubmit() {
     if (signUpValidateAndSave()) {
-      presenter.onSignUp(_email, _password);
+      presenter.onSignUp(_email, _password,_name);
     }
   }
 
@@ -91,7 +87,7 @@ class _SignUpSignInPageState extends State<SignUpSignInPage>
             children: <Widget>[
               new TextFormField(
                 decoration: new InputDecoration(
-                  hintText: 'xyz@gmail.com',
+                  hintText: 'sometext@gmail.com',
                   labelText: 'Email',
                   icon: const Icon(Icons.email),
                 ),
@@ -139,13 +135,14 @@ class _SignUpSignInPageState extends State<SignUpSignInPage>
           children: <Widget>[
             Container(
               child: TextFormField(
+                controller: nameController,
                 decoration: InputDecoration(
                   hintText: 'Username',
                   labelText: 'Username',
                   icon: const Icon(Icons.person),
                 ),
                 validator: (val) => val.isEmpty ? 'username is empty' : null,
-                // onSaved: _signupState.setString_first_name,
+                onSaved: (val) => _name = val,
               ),
               padding:
                   const EdgeInsets.only(bottom: 15.0, top: 0.0, right: 20.0),
@@ -153,6 +150,7 @@ class _SignUpSignInPageState extends State<SignUpSignInPage>
             Container(
               child: Container(
                 child: TextFormField(
+                  controller: emailController,
                   decoration: InputDecoration(
                     icon: const Icon(Icons.mail),
                     hintText: 'xyz@gmail.com',
@@ -190,6 +188,7 @@ class _SignUpSignInPageState extends State<SignUpSignInPage>
             Container(
               child: Container(
                 child: TextFormField(
+                  controller: confirmController,
                   decoration: InputDecoration(
                     hintText: 'Confirm Password',
                     labelText: 'Confirm Password',
@@ -267,16 +266,23 @@ class _SignUpSignInPageState extends State<SignUpSignInPage>
 
   @override
   void onLoginSuccess() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );
+    setState(() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    });
   }
 
   @override
   void onSignUpSuccess() {
+    passwordController.text='';
+    confirmController.text='';
+    emailController.text='';
+    nameController.text='';
+
     scaffoldKey.currentState
         .showSnackBar(SnackBar(content: Text('account created Successfully')));
-    tabController.animateTo(0);
+    tabController.animateTo(1);
   }
 }

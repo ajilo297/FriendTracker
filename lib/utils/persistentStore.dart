@@ -5,6 +5,7 @@ class PersistantStore {
   static PersistantStore singleton;
 
   final String PREF_EMAIL = 'PREF_EMAIL';
+  final String PREF_ID = 'PREF_ID';
 
   SharedPreferences _prefs;
 
@@ -29,5 +30,13 @@ class PersistantStore {
 
   Future<void> setEmail(String email) async {
     return _prefs.setString(PREF_EMAIL, email);
+  }
+
+  Future<String> getId() async {
+    return _prefs.getString(PREF_ID);
+  }
+
+  Future<void> setId(String id) async {
+    return _prefs.setString(PREF_ID, id);
   }
 }

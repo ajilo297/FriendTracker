@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import './../../utils/CheckConectivity.dart';
 import './../../pages/signUp/SignUpandSignInPage.dart';
+import './../../pages/home/HomePage.dart';
+import './../../utils/persistentStore.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -11,9 +13,11 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   GlobalKey<ScaffoldState> scaffoldKey;
+  PersistantStore _persistantStore;
   @override
   void initState() {
     super.initState();
+    _persistantStore = PersistantStore();
     scaffoldKey = GlobalKey<ScaffoldState>();
 
     Timer(Duration(seconds: 2), () => checkConection());
@@ -23,10 +27,15 @@ class _SplashScreenState extends State<SplashScreen> {
     bool isConnected = await checkNetworkConnection();
     if (isConnected) {
       Navigator.pop(context);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => SignUpSignInPage()),
-      );
+      if (await _persistantStore.getEmail() != null) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => HomePage()));
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SignUpSignInPage()),
+        );
+      }
     } else {
       scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text('check internet connectivity'),
