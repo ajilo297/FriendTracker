@@ -76,10 +76,7 @@ class _HomePageState extends State<HomePage> implements IHomePage {
   }
 
   void onLogOut() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => SignUpSignInPage()),
-    );
+    Navigator.pushNamed(context, '/login');
     presenter.onLogout();
   }
 

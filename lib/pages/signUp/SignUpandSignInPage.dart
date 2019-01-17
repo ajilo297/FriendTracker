@@ -267,10 +267,11 @@ class _SignUpSignInPageState extends State<SignUpSignInPage>
   @override
   void onLoginSuccess() {
     setState(() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
+      Navigator.pushNamed(context, '/home');
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => HomePage()),
+      // );
     });
   }
 

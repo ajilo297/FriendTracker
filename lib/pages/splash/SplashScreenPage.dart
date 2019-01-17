@@ -28,13 +28,9 @@ class _SplashScreenState extends State<SplashScreen> {
     if (isConnected) {
       Navigator.pop(context);
       if (await _persistantStore.getEmail() != null) {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => HomePage()));
+        Navigator.pushNamed(context, '/home');
       } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SignUpSignInPage()),
-        );
+        Navigator.pushNamed(context, '/login');
       }
     } else {
       scaffoldKey.currentState.showSnackBar(SnackBar(

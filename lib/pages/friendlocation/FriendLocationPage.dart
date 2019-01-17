@@ -48,7 +48,6 @@ class _FriendLocationPageState extends State<FriendLocationPage>
         ),
         body: currentUser != null
             ? new Container(
-                padding: EdgeInsets.all(16.0),
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 child: GoogleMap(
